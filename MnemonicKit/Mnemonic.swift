@@ -61,6 +61,7 @@ public class Mnemonic {
   public static func deterministicSeedString(
     from mnemonic: String,
     passphrase: String = "",
+    iterations: Int = 2_048,
     language _: MnemonicLanguageType = .english
   ) -> String? {
     guard let normalizedData = self.normalized(string: mnemonic),
@@ -72,7 +73,7 @@ public class Mnemonic {
     let saltBytes = saltData.bytes
     do {
       let bytes =
-        try PKCS5.PBKDF2(password: passwordBytes, salt: saltBytes, iterations: 2_048, variant: .sha512).calculate()
+        try PKCS5.PBKDF2(password: passwordBytes, salt: saltBytes, iterations: iterations, variant: .sha512).calculate()
       return bytes.toHexString()
     } catch {
       return nil
